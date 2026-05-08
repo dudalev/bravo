@@ -149,12 +149,13 @@ pub fn dbag_tab2file_test() {
   |> should.be_ok
   dbag.tab2file(table, "dbag9", True, True, True)
   |> should.be_ok
-  dbag.delete(table)
-  |> should.be_ok
-  shellout.command("mkdir", ["no_access", "-p", "-m", "555"], ".", [])
+  let _ = shellout.command("rm", ["-rf", "no_access"], ".", [])
+  shellout.command("mkdir", ["-m", "555", "no_access"], ".", [])
   |> should.be_ok
   dbag.tab2file(table, "no_access/dbag9", True, True, True)
   |> should.equal(Error(bravo.NoFilePermissions))
+  dbag.delete(table)
+  |> should.be_ok
 }
 
 pub fn dbag_file2tab_test() {
